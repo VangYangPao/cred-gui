@@ -1,0 +1,4 @@
+[submodule "cred"]
+	path = cred
+	url = https://github.com/cred-project/cred
+	ignore = all
