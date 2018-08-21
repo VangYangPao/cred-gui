@@ -53,7 +53,7 @@ Rectangle{
         font.family: CredComponents.Style.fontRegular.name
         font.pixelSize: 14 * scaleRatio
         text: labelHeader
-        color: CredComponents.Style.dimmedFontColor
+        color: CredComponents.Style.greyFontColor
     }
 
     Text {
@@ -77,7 +77,7 @@ Rectangle{
             label2.color = CredComponents.Style.defaultFontColor;
         }
         onExited: {
-            label1.color = CredComponents.Style.dimmedFontColor
+            label1.color = CredComponents.Style.greyFontColor;
             label2.color = CredComponents.Style.dimmedFontColor;
         }
         onClicked: {

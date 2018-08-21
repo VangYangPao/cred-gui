@@ -19,6 +19,7 @@
         <file>pages/History.qml</file>
         <file>pages/AddressBook.qml</file>
         <file>pages/Mining.qml</file>
+        <file>pages/Settings.qml</file>
         <file>components/NetworkStatusItem.qml</file>
         <file>images/statusConnected.png</file>
         <file>images/statusDisconnected.png</file>
@@ -85,9 +86,11 @@
         <file>images/prevPage.png</file>
         <file>wizard/WizardOptions.qml</file>
         <file>images/createWallet.png</file>
+        <file>images/createWalletFromDevice.png</file>
         <file>images/openAccount.png</file>
         <file>images/recoverWallet.png</file>
         <file>wizard/WizardCreateWallet.qml</file>
+        <file>wizard/WizardCreateWalletFromDevice.qml</file>
         <file>images/greyTriangle.png</file>
         <file>images/copyToClipboard.png</file>
         <file>wizard/WizardPassword.qml</file>
@@ -131,9 +134,6 @@
         <file>lang/flags/catalonia.png</file>
         <file>lang/flags/tr.png</file>
         <file>lang/flags/ukraine.png</file>
-        <file>lang/flags/lt.png</file>
-        <file>lang/flags/hungary.png</file>
-        <file>lang/flags/finland.png</file>
         <file>wizard/WizardManageWalletUI.qml</file>
         <file>wizard/WizardRecoveryWallet.qml</file>
         <file>wizard/WizardMemoTextInput.qml</file>
@@ -210,17 +210,5 @@
         <file>js/Utils.js</file>
         <file>components/RadioButton.qml</file>
         <file>images/editIcon.png</file>
-        <file>pages/settings/Settings.qml</file>
-        <file>pages/settings/SettingsWallet.qml</file>
-        <file>pages/settings/SettingsNode.qml</file>
-        <file>pages/settings/SettingsLog.qml</file>
-        <file>pages/settings/SettingsLayout.qml</file>
-        <file>pages/settings/SettingsInfo.qml</file>
-        <file>pages/settings/Navbar.qml</file>
-        <file>images/settings_remote.png</file>
-        <file>images/settings_navbar_side.png</file>
-        <file>images/settings_navbar_side_active.png</file>
-        <file>images/settings_local.png</file>
-        <file>components/WarningBox.qml</file>
     </qresource>
 </RCC>

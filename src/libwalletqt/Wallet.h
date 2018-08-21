@@ -111,10 +111,10 @@ public:
     Q_INVOKABLE bool store(const QString &path = "");
 
     //! initializes wallet
-    Q_INVOKABLE bool init(const QString &daemonAddress, quint64 upperTransactionLimit = 0, bool isRecovering = false, quint64 restoreHeight = 0);
+    Q_INVOKABLE bool init(const QString &daemonAddress, quint64 upperTransactionLimit = 0, bool isRecovering = false, bool isRecoveringFromDevice = false, quint64 restoreHeight = 0);
 
     //! initializes wallet asynchronously
-    Q_INVOKABLE void initAsync(const QString &daemonAddress, quint64 upperTransactionLimit = 0, bool isRecovering = false, quint64 restoreHeight = 0);
+    Q_INVOKABLE void initAsync(const QString &daemonAddress, quint64 upperTransactionLimit = 0, bool isRecovering = false, bool isRecoveringFromDevice = false, quint64 restoreHeight = 0);
 
     // Set daemon rpc user/pass
     Q_INVOKABLE void setDaemonLogin(const QString &daemonUsername = "", const QString &daemonPassword = "");
@@ -158,10 +158,6 @@ public:
 
     //! returns daemon's blockchain target height
     Q_INVOKABLE quint64 daemonBlockChainTargetHeight() const;
-
-    //! export/import key images
-    Q_INVOKABLE bool exportKeyImages(const QString& path);
-    Q_INVOKABLE bool importKeyImages(const QString& path);
 
     //! refreshes the wallet
     Q_INVOKABLE bool refresh();

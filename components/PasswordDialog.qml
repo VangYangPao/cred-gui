@@ -108,8 +108,6 @@ Item {
                 leftPadding: 10
                 topPadding: 10
                 color: CredComponents.Style.defaultFontColor
-                selectionColor: CredComponents.Style.dimmedFontColor
-                selectedTextColor: CredComponents.Style.defaultFontColor
 
                 background: Rectangle {
                     radius: 2
@@ -127,7 +125,6 @@ Item {
                     }
                 }
 
-                Keys.enabled: root.visible
                 Keys.onReturnPressed: {
                     root.close()
                     root.accepted()

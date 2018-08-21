@@ -17,7 +17,7 @@ if [ ! -d $CRED_DIR/src ]; then
 fi
 git submodule update --remote
 git -C $CRED_DIR fetch
-git -C $CRED_DIR checkout release-v0.12
+git -C $CRED_DIR checkout v0.12.3.0
 
 # get cred core tag
 get_tag
@@ -75,7 +75,8 @@ else
 fi
 
 if [ "$BUILD_LIBWALLET" != true ]; then
-    exit 0
+    # exit this script
+    return
 fi
 
 echo "GUI_CRED_VERSION=\"$VERSIONTAG\"" > $CRED_DIR/version.sh

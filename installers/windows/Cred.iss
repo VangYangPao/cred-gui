@@ -8,7 +8,7 @@ AppName=Cred GUI Wallet
 ; Thus it's important to keep this stable over releases
 ; With a different "AppName" InnoSetup would treat a mere update as a completely new application and thus mess up
 
-AppVersion=1.0.0.0
+AppVersion=0.12.0.0
 DefaultDirName={pf}\Cred GUI Wallet
 DefaultGroupName=Cred GUI Wallet
 UninstallDisplayIcon={app}\cred-wallet-gui.exe
@@ -19,8 +19,6 @@ WizardSmallImageFile=WizardSmallImage.bmp
 WizardImageFile=WelcomeImage.bmp
 DisableWelcomePage=no
 LicenseFile=LICENSE
-AppPublisher=The Cred Developer Community
-AppPublisherURL=https://getcred.org
 
 
 [Languages]
@@ -41,7 +39,7 @@ Name: "en"; MessagesFile: "compiler:Default.isl"
 ; .exe/.dll file possibly with version info).
 ;
 ; This is far more robust than relying on version info or on file dates (flag "comparetimestamp").
-; As of version 1.0.0.0, the Cred .exe files do not carry version info anyway in their .exe headers.
+; As of version 0.12.0.0, the Cred .exe files do not carry version info anyway in their .exe headers.
 ; The only small drawback seems to be somewhat longer update times because each and every file is
 ; copied again, even if already present with correct file date and identical content.
 ;
@@ -62,7 +60,6 @@ Source: "cred-wallet-gui.log"; DestDir: "{app}"; Flags: onlyifdoesntexist; Permi
 
 ; Cred CLI wallet
 Source: "bin\cred-wallet-cli.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\cred-gen-trusted-multisig.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 ; Cred wallet RPC interface implementation
 Source: "bin\cred-wallet-rpc.exe"; DestDir: "{app}"; Flags: ignoreversion
@@ -75,9 +72,6 @@ Source: "cred-daemon.bat"; DestDir: "{app}"; Flags: ignoreversion;
 
 ; Cred blockchain utilities
 Source: "bin\cred-blockchain-export.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\cred-blockchain-import.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\cred-blockchain-blackball.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\cred-blockchain-usage.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\cred-blockchain-import.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 ; was present in 0.10.3.1, not present anymore in 0.11.1.0 and after
@@ -103,7 +97,7 @@ Source: "bin\bearer\*"; DestDir: "{app}\bearer"; Flags: recursesubdirs ignorever
 ; Qt Windows platform plugins	
 Source: "bin\platforms\*"; DestDir: "{app}\platforms"; Flags: recursesubdirs ignoreversion
 Source: "bin\platforminputcontexts\*"; DestDir: "{app}\platforminputcontexts"; Flags: recursesubdirs ignoreversion
-; No more "styles" subdirectory in 1.0.0.0
+Source: "bin\styles\*"; DestDir: "{app}\styles"; Flags: recursesubdirs ignoreversion
 
 ; Qt support for SVG icons	
 Source: "bin\iconengines\*"; DestDir: "{app}\iconengines"; Flags: recursesubdirs ignoreversion
@@ -122,8 +116,7 @@ Source: "bin\playlistformats\*"; DestDir: "{app}\playlistformats"; Flags: recurs
 ; Qt graphical effects as part of the core runtime, effects like blurring and blending
 Source: "bin\QtGraphicalEffects\*"; DestDir: "{app}\QtGraphicalEffects"; Flags: recursesubdirs ignoreversion
 
-; Qt "private" directory with "effects"
-Source: "bin\private\*"; DestDir: "{app}\private"; Flags: recursesubdirs ignoreversion
+; No more Qt "private" directory in 0.12.0.0
 
 ; Qt QML files
 Source: "bin\QtQml\*"; DestDir: "{app}\QtQml"; Flags: recursesubdirs ignoreversion
@@ -131,10 +124,6 @@ Source: "bin\QtQml\*"; DestDir: "{app}\QtQml"; Flags: recursesubdirs ignoreversi
 ; Qt Quick files
 Source: "bin\QtQuick\*"; DestDir: "{app}\QtQuick"; Flags: recursesubdirs ignoreversion
 Source: "bin\QtQuick.2\*"; DestDir: "{app}\QtQuick.2"; Flags: recursesubdirs ignoreversion
-
-; Qt Quick Controls 2 modules of the Qt Toolkit
-Source: "bin\Material\*"; DestDir: "{app}\Material"; Flags: recursesubdirs ignoreversion
-Source: "bin\Universal\*"; DestDir: "{app}\Universal"; Flags: recursesubdirs ignoreversion
 
 ; Qt Quick 2D Renderer fallback for systems / environments with "low-level graphics" i.e. without 3D support
 Source: "bin\scenegraph\*"; DestDir: "{app}\scenegraph"; Flags: recursesubdirs ignoreversion
@@ -178,13 +167,12 @@ Source: "bin\libiconv-2.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 ; ICU, International Components for Unicode
 ; After changes for supporting UTF-8 path and file names by using Boost Locale, all those 5
-; ICU libraries are needed starting from 0.12.0.0
-; Use wildcards instead of specific version number like 61 because that seems to change frequently
-Source: "bin\libicudt??.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\libicuin??.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\libicuio??.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\libicutu??.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\libicuuc??.dll"; DestDir: "{app}"; Flags: ignoreversion
+; ICU libraries are needed in 0.12.0.0
+Source: "bin\libicudt58.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\libicuin58.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\libicuio58.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\libicutu58.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "bin\libicuuc58.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 ; Library for native language support, part of GNU gettext
 Source: "bin\libintl-8.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -206,8 +194,7 @@ Source: "bin\liblzma-5.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\libmng-2.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 ; PCRE, Perl Compatible Regular Expressions
-; "libpcre2-16-0.dll" is new for 0.12.0.0
-; Uclear whether "libpcre16-0.dll" is still needed; some versions of "Qt5Core.dll" seem to reference it, some not
+; "libpcre2-16-0.dll" is new for 0.12.0.0; unclear whether "libpcre16-0.dll" is still needed
 Source: "bin\libpcre-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\libpcre16-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\libpcre2-16-0.dll"; DestDir: "{app}"; Flags: ignoreversion
@@ -228,6 +215,7 @@ Source: "bin\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "bin\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 ; Stack protection
+; New for 0.12.0.0
 Source: "bin\libssp-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 
@@ -250,7 +238,6 @@ var
 procedure InitializeWizard;
 var s: String;
     width: Integer;
-    blockChainDir: String;
 begin
   // Large image for the "Welcome" page, with page reconfigured
   WizardForm.WelcomeLabel1.Visible := false;
@@ -265,7 +252,7 @@ begin
   // Additional wizard page for entering a special blockchain location
   blockChainDefaultDir := ExpandConstant('{commonappdata}\bitcred');
   s := 'The default folder to store the Cred blockchain is ' + blockChainDefaultDir;
-  s := s + '. As this will need more than 60 GB of free space, you may want to use a folder on a different drive.';
+  s := s + '. As this will need more than 50 GB of free space, you may want to use a folder on a different drive.';
   s := s + ' If yes, specify that folder here.';
 
   BlockChainDirPage := CreateInputDirPage(wpSelectDir,
@@ -274,17 +261,11 @@ begin
     False, '');
   BlockChainDirPage.Add('');
 
-  // Evaluate proposal for the blockchain location
-  // In case of an update take the blockchain location from the actual setting in the registry
-  RegQueryStringValue(HKEY_CURRENT_USER, 'Software\cred-project\cred-core', 'blockchainDataDir', blockChainDir);
-  if blockChainDir = '' then begin
-    blockChainDir := GetPreviousData('BlockChainDir', '');
+  BlockChainDirPage.Values[0] := GetPreviousData('BlockChainDir', '');
+  if BlockChainDirPage.Values[0] = '' then begin
+    // Unfortunately 'TInputDirWizardDirPage' does not allow empty field
+    BlockChainDirPage.Values[0] := blockChainDefaultDir;
   end;
-  if blockChainDir = '' then begin
-    // Unfortunately 'TInputDirWizardDirPage' does not allow empty field, so "propose" Cred default location
-    blockChainDir := blockChainDefaultDir;
-  end;
-  BlockChainDirPage.Values[0] := blockChainDir;
 end;
 
 procedure RegisterPreviousData(PreviousDataKey: Integer);
@@ -300,17 +281,6 @@ begin
   s := BlockChainDirPage.Values[0];
   Result := s;
   // No quotes for folder name with blanks as this is never used as part of a command line
-end;
-
-function BlockChainDirOrEmpty(Param: String) : String;
-VAR s: String;
-begin
-  s := BlockChainDir('');
-  if s = blockChainDefaultDir then begin
-    // No need to add the default dir as setting
-    s := '';
-  end;
-  Result := s;
 end;
 
 function UpdateReadyMemo(Space, NewLine, MemoUserInfoInfo, MemoDirInfo, MemoTypeInfo,
@@ -414,5 +384,5 @@ Name: "{userdesktop}\GUI Wallet"; Filename: "{app}\cred-wallet-gui.exe"; Tasks: 
 ; Side effect, mostly positive: The uninstaller will clean the registry
 Root: HKCU; Subkey: "Software\cred-project"; Flags: uninsdeletekeyifempty
 Root: HKCU; Subkey: "Software\cred-project\cred-core"; Flags: uninsdeletekey
-Root: HKCU; Subkey: "Software\cred-project\cred-core"; ValueType: string; ValueName: "blockchainDataDir"; ValueData: {code:BlockChainDirOrEmpty};
+Root: HKCU; Subkey: "Software\cred-project\cred-core"; ValueType: string; ValueName: "daemonFlags"; ValueData: {code:DaemonFlags};
 

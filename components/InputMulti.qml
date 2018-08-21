@@ -32,25 +32,31 @@ import QtQuick 2.7
 import "../js/TxUtils.js" as TxUtils
 import "../components" as CredComponents
 
-TextArea {
-    property int fontSize: 18 * scaleRatio
-    property bool fontBold: false
-    property string fontColor: CredComponents.Style.defaultFontColor
 
-    property bool mouseSelection: true
+TextArea {
     property bool error: false
     property bool addressValidation: false
+    property bool wrapAnywhere: true
+    property int fontSize: 18 * scaleRatio
+    property bool fontBold: false
 
     id: textArea
     font.family: CredComponents.Style.fontRegular.name
-    color: fontColor
     font.pixelSize: fontSize
     font.bold: fontBold
     horizontalAlignment: TextInput.AlignLeft
-    selectByMouse: mouseSelection
+    selectByMouse: true
+    color: CredComponents.Style.defaultFontColor
     selectionColor: CredComponents.Style.dimmedFontColor
     selectedTextColor: CredComponents.Style.defaultFontColor
 
+    wrapMode: {
+        if(wrapAnywhere){
+            return Text.WrapAnywhere;
+        } else {
+            return Text.WordWrap;
+        }
+    }
     onTextChanged: {
         if(addressValidation){
             // js replacement for `RegExpValidator { regExp: /[0-9A-Fa-f]{95}/g }`

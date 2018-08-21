@@ -67,7 +67,7 @@ Rectangle {
             font.pixelSize: 13 * scaleRatio
             font.bold: true
             color: "white"
-            text: qsTr("Synchronizing %1").arg(syncType) + translationManager.emptyString
+            text: qsTr("Synchronizing %1").arg(syncType)
             height: 18 * scaleRatio
         }
 

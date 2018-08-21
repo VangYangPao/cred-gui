@@ -40,7 +40,6 @@ import credComponents.NetworkType 1.0
 
 import "components"
 import "wizard"
-import "../js/Utils.js" as Utils
 import "js/Windows.js" as Windows
 
 ApplicationWindow {
@@ -75,7 +74,7 @@ ApplicationWindow {
     property bool remoteNodeConnected: false
     property bool androidCloseTapped: false;
     // Default daemon addresses
-    readonly property string localDaemonAddress : persistentSettings.nettype == NetworkType.MAINNET ? "localhost:21181" : persistentSettings.nettype == NetworkType.TESTNET ? "localhost:31181" : "localhost:41181"
+    readonly property string localDaemonAddress : persistentSettings.nettype == NetworkType.MAINNET ? "localhost:21181" : persistentSettings.nettype == NetworkType.TESTNET ? "localhost:31182" : "localhost:41181"
     property string currentDaemonAddress;
     property bool startLocalNodeCancelled: false
     property int estimatedBlockchainSize: 50 // GB
@@ -103,11 +102,12 @@ ApplicationWindow {
         if(seq === "Ctrl+S") middlePanel.state = "Transfer"
         else if(seq === "Ctrl+R") middlePanel.state = "Receive"
         else if(seq === "Ctrl+K") middlePanel.state = "TxKey"
+        else if(seq === "Ctrl+S") middlePanel.state = "SharedRingDB"
         else if(seq === "Ctrl+H") middlePanel.state = "History"
         else if(seq === "Ctrl+B") middlePanel.state = "AddressBook"
         else if(seq === "Ctrl+M") middlePanel.state = "Mining"
         else if(seq === "Ctrl+I") middlePanel.state = "Sign"
-        else if(seq === "Ctrl+G") middlePanel.state = "SharedRingDB"
+        else if(seq === "Ctrl+A") middlePanel.state = "SharedRingDB"
         else if(seq === "Ctrl+E") middlePanel.state = "Settings"
         else if(seq === "Ctrl+D") middlePanel.state = "Advanced"
         else if(seq === "Ctrl+Tab" || seq === "Alt+Tab") {
@@ -331,7 +331,7 @@ ApplicationWindow {
             currentDaemonAddress = localDaemonAddress
 
         console.log("initializing with daemon address: ", currentDaemonAddress)
-        currentWallet.initAsync(currentDaemonAddress, 0, persistentSettings.is_recovering, persistentSettings.restore_height);
+        currentWallet.initAsync(currentDaemonAddress, 0, persistentSettings.is_recovering, persistentSettings.is_recovering_from_device, persistentSettings.restore_height);
     }
 
     function walletPath() {
@@ -358,7 +358,7 @@ ApplicationWindow {
         middlePanel.updateStatus();
         leftPanel.networkStatus.connected = status
 
-        // update local daemon status.
+        // update local daemon status
         if(!isMobile && walletManager.isDaemonLocal(appWindow.persistentSettings.daemon_address))
             daemonRunning = status;
 
@@ -1010,10 +1010,11 @@ ApplicationWindow {
         property bool   allow_background_mining : false
         property bool   miningIgnoreBattery : true
         property var    nettype: NetworkType.MAINNET
-        property string daemon_address: nettype == NetworkType.TESTNET ? "localhost:31181" : nettype == NetworkType.STAGENET ? "localhost:41181" : "localhost:21181"
+        property string daemon_address: nettype == NetworkType.TESTNET ? "localhost:31182" : nettype == NetworkType.STAGENET ? "localhost:41181" : "localhost:21181"
         property string payment_id
         property int    restore_height : 0
         property bool   is_recovering : false
+        property bool   is_recovering_from_device : false
         property bool   customDecorations : true
         property string daemonFlags
         property int logLevel: 0
@@ -1299,25 +1300,6 @@ ApplicationWindow {
             anchors.left: parent.left
             anchors.right: parent.right
             height: visible? 65 * scaleRatio : 0
-
-            MouseArea {
-                enabled: persistentSettings.customDecorations
-                property var previousPosition
-                anchors.fill: parent
-                propagateComposedEvents: true
-                onPressed: previousPosition = globalCursor.getPosition()
-                onPositionChanged: {
-                    if (pressedButtons == Qt.LeftButton) {
-                        var pos = globalCursor.getPosition()
-                        var dx = pos.x - previousPosition.x
-                        var dy = pos.y - previousPosition.y
-
-                        appWindow.x += dx
-                        appWindow.y += dy
-                        previousPosition = pos
-                    }
-                }
-            }
         }
 
         LeftPanel {
@@ -1337,6 +1319,7 @@ ApplicationWindow {
             onTransferClicked: {
                 middlePanel.state = "Transfer";
                 middlePanel.flickable.contentY = 0;
+                mainFlickable.contentY = 0;
                 if(isMobile) {
                     hideMenu();
                 }
@@ -1415,7 +1398,31 @@ ApplicationWindow {
                 updateBalance();
             }
 
-            onKeysClicked: Utils.showSeedPage();
+            onKeysClicked: {
+                passwordDialog.onAcceptedCallback = function() {
+                    if(walletPassword === passwordDialog.password){
+                        if(currentWallet.seedLanguage == "") {
+                            console.log("No seed language set. Using English as default");
+                            currentWallet.setSeedLanguage("English");
+                        }
+                        // Load keys page
+                        middlePanel.state = "Keys"
+                    } else {
+                        informationPopup.title  = qsTr("Error") + translationManager.emptyString;
+                        informationPopup.text = qsTr("Wrong password");
+                        informationPopup.open()
+                        informationPopup.onCloseCallback = function() {
+                            passwordDialog.open()
+                        }
+                    }
+                }
+                passwordDialog.onRejectedCallback = function() {
+                    appWindow.showPageRequest("Settings");
+                }
+                passwordDialog.open();
+                if(isMobile) hideMenu();
+                updateBalance();
+            }
         }
 
         RightPanel {
@@ -1607,7 +1614,7 @@ ApplicationWindow {
             showCredLogo: true
             onCloseClicked: appWindow.close();
             onMaximizeClicked: {
-                appWindow.visibility = appWindow.visibility !== Window.Maximized ? Window.Maximized :
+                appWindow.visibility = appWindow.visibility !== Window.FullScreen ? Window.FullScreen :
                                                                                     Window.Windowed
             }
             onMinimizeClicked: appWindow.visibility = Window.Minimized

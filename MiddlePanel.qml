@@ -37,7 +37,6 @@ import QtGraphicalEffects 1.0
 import credComponents.Wallet 1.0
 
 import "./pages"
-import "./pages/settings"
 
 Rectangle {
     id: root
@@ -142,7 +141,7 @@ Rectangle {
             }, State {
                 name: "Settings"
                PropertyChanges { target: root; currentView: settingsView }
-               PropertyChanges { target: mainFlickable; contentHeight: settingsView.settingsHeight }
+               PropertyChanges { target: mainFlickable; contentHeight: settingsView.settingsHeight + 100 }
             }, State {
                 name: "Mining"
                 PropertyChanges { target: root; currentView: miningView }

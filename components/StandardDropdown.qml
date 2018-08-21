@@ -32,7 +32,6 @@ import "../components" as CredComponents
 
 Item {
     id: dropdown
-    property int itemTopMargin: 0
     property alias dataModel: repeater.model
     property string shadowPressedColor
     property string shadowReleasedColor
@@ -77,7 +76,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.topMargin: parent.itemTopMargin
         height: dropdown.dropdownHeight
 
         Rectangle {

@@ -33,7 +33,6 @@ import credComponents.Clipboard 1.0
 import credComponents.PendingTransaction 1.0
 import credComponents.Wallet 1.0
 import "../components"
-import "../components" as CredComponents
 import "." 1.0
 
 
@@ -44,7 +43,6 @@ Rectangle {
     signal sweepUnmixableClicked()
 
     color: "transparent"
-    property string warningContent: ""
     property string startLinkText: qsTr("<style type='text/css'>a {text-decoration: none; color: #FF6C3C; font-size: 14px;}</style><font size='2'> (</font><a href='#'>Start daemon</a><font size='2'>)</font>") + translationManager.emptyString
     property bool showAdvanced: false
 
@@ -124,13 +122,47 @@ Rectangle {
 
       spacing: 30 * scaleRatio
 
-      RowLayout {
-          visible: root.warningContent !== ""
+      RowLayout{
+          visible: warningText.text !== ""
 
-          CredComponents.WarningBox {
-              text: warningContent
-              onLinkActivated: {
-                  appWindow.startDaemon(appWindow.persistentSettings.daemonFlags);
+          Rectangle {
+              id: statusRect
+              Layout.preferredHeight: warningText.height + 40
+              Layout.fillWidth: true
+
+              radius: 2
+              border.color: Style.inputBorderColorInActive
+              border.width: 1
+              color: "transparent"
+
+              GridLayout{
+                  Layout.fillWidth: true
+                  Layout.preferredHeight: warningText.height + 40
+
+                  Image {
+                      Layout.alignment: Qt.AlignVCenter
+                      Layout.preferredHeight: 33
+                      Layout.preferredWidth: 33
+                      Layout.leftMargin: 10
+                      Layout.topMargin: 10
+                      source: "../images/warning.png"
+                  }
+
+                  Text {
+                      id: warningText
+                      Layout.topMargin: 12 * scaleRatio
+                      Layout.preferredWidth: statusRect.width - 80
+                      Layout.leftMargin: 6
+                      text: qsTr("This page lets you sign/verify a message (or file contents) with your address.") + translationManager.emptyString
+                      wrapMode: Text.Wrap
+                      font.family: Style.fontRegular.name
+                      font.pixelSize: 14 * scaleRatio
+                      color: Style.defaultFontColor
+                      textFormat: Text.RichText
+                      onLinkActivated: {
+                          appWindow.startDaemon(appWindow.persistentSettings.daemonFlags);
+                      }
+                  }
               }
           }
       }
@@ -188,7 +220,7 @@ Rectangle {
               ListModel {
                    id: priorityModelV5
 
-                   ListElement { column1: qsTr("Automatic") ; column2: ""; priority: 0}
+                   ListElement { column1: qsTr("Default") ; column2: ""; priority: 0}
                    ListElement { column1: qsTr("Slow (x0.25 fee)") ; column2: ""; priority: 1}
                    ListElement { column1: qsTr("Normal (x1 fee)") ; column2: ""; priority: 2 }
                    ListElement { column1: qsTr("Fast (x5 fee)") ; column2: ""; priority: 3 }
@@ -223,8 +255,6 @@ Rectangle {
                 + translationManager.emptyString
               labelButtonText: qsTr("Resolve") + translationManager.emptyString
               placeholderText: "4.. / 8.."
-              wrapMode: Text.WrapAnywhere
-              addressValidation: true
               onInputLabelLinkActivated: { appWindow.showPageRequest("AddressBook") }
           }
 
@@ -289,19 +319,17 @@ Rectangle {
 
       RowLayout {
           // payment id input
-          LineEditMulti {
+          LineEdit {
               id: paymentIdLine
               fontBold: true
               labelText: qsTr("Payment ID <font size='2'>( Optional )</font>") + translationManager.emptyString
               placeholderText: qsTr("16 or 64 hexadecimal characters") + translationManager.emptyString
               Layout.fillWidth: true
-              wrapMode: Text.WrapAnywhere
-              addressValidation: false
           }
       }
 
       RowLayout {
-          LineEditMulti {
+          LineEdit {
               id: descriptionLine
               labelText: qsTr("Description <font size='2'>( Optional )</font>") + translationManager.emptyString
               placeholderText: qsTr("Saved to local wallet history") + translationManager.emptyString
@@ -324,7 +352,7 @@ Rectangle {
                   }
                   
                   // There is no warning box displayed
-                  if(root.warningContent !== ''){
+                  if(warningText.text !== ''){
                       return false;
                   }
                   
@@ -507,30 +535,6 @@ Rectangle {
                     submitTxDialog.open();
                 }
             }
-            
-            StandardButton {
-                id: exportKeyImagesButton
-                text: qsTr("Export key images") + translationManager.emptyString
-                small: true
-                visible: !appWindow.viewOnly
-                enabled: pageRoot.enabled
-                onClicked: {
-                    console.log("Transfer: export key images clicked")
-                    exportKeyImagesDialog.open();
-                }
-            }
-
-            StandardButton {
-                id: importKeyImagesButton
-                text: qsTr("Import key images") + translationManager.emptyString
-                small: true
-                visible: appWindow.viewOnly && walletManager.isDaemonLocal(appWindow.currentDaemonAddress)
-                enabled: pageRoot.enabled
-                onClicked: {
-                    console.log("Transfer: import key images clicked")
-                    importKeyImagesDialog.open();
-                }
-            }
         }
     }
 
@@ -622,35 +626,6 @@ Rectangle {
         }
 
     }
-    
-    //ExportKeyImagesDialog
-    FileDialog {
-        id: exportKeyImagesDialog
-        selectMultiple: false
-        selectExisting: false
-        onAccepted: {
-            console.log(walletManager.urlToLocalPath(exportKeyImagesDialog.fileUrl))
-            currentWallet.exportKeyImages(walletManager.urlToLocalPath(exportKeyImagesDialog.fileUrl));
-        }
-        onRejected: {
-            console.log("Canceled");
-        }
-    }
-
-    //ImportKeyImagesDialog
-    FileDialog {
-        id: importKeyImagesDialog
-        selectMultiple: false
-        selectExisting: true
-        title: qsTr("Please choose a file") + translationManager.emptyString
-        onAccepted: {
-            console.log(walletManager.urlToLocalPath(importKeyImagesDialog.fileUrl))
-            currentWallet.importKeyImages(walletManager.urlToLocalPath(importKeyImagesDialog.fileUrl));
-        }
-        onRejected: {
-            console.log("Canceled");
-        }
-    }
 
 
 
@@ -679,7 +654,7 @@ Rectangle {
     function updateStatus() {
         pageRoot.enabled = true;
         if(typeof currentWallet === "undefined") {
-            root.warningContent = qsTr("Wallet is not connected to daemon.") + root.startLinkText
+            warningText.text = qsTr("Wallet is not connected to daemon.") + root.startLinkText
             return;
         }
 
@@ -691,20 +666,20 @@ Rectangle {
 
         switch (currentWallet.connected()) {
         case Wallet.ConnectionStatus_Disconnected:
-            root.warningContent = qsTr("Wallet is not connected to daemon.") + root.startLinkText
+            warningText.text = qsTr("Wallet is not connected to daemon.") + root.startLinkText
             break
         case Wallet.ConnectionStatus_WrongVersion:
-            root.warningContent = qsTr("Connected daemon is not compatible with GUI. \n" +
+            warningText.text = qsTr("Connected daemon is not compatible with GUI. \n" +
                                    "Please upgrade or connect to another daemon")
             break
         default:
             if(!appWindow.daemonSynced){
-                root.warningContent = qsTr("Waiting on daemon synchronization to finish")
+                warningText.text = qsTr("Waiting on daemon synchronization to finish")
             } else {
                 // everything OK, enable transfer page
                 // Light wallet is always ready
                 pageRoot.enabled = true;
-                root.warningContent = "";
+                warningText.text = "";
             }
         }
     }

@@ -65,7 +65,7 @@ Item {
     }
 
     ColumnLayout {
-        z: parent.z + 1
+        z: bg.z + 1
         id: mainLayout
         spacing: 10
         anchors { fill: parent; margins: 35 }
@@ -103,8 +103,6 @@ Item {
                 leftPadding: 10
                 topPadding: 10
                 color: CredComponents.Style.defaultFontColor
-                selectionColor: CredComponents.Style.dimmedFontColor
-                selectedTextColor: CredComponents.Style.defaultFontColor
 
                 background: Rectangle {
                     radius: 2

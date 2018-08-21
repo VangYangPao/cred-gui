@@ -90,7 +90,7 @@ Rectangle {
                         Layout.topMargin: 12 * scaleRatio
                         Layout.preferredWidth: statusRect.width - 80
                         Layout.leftMargin: 6
-                        text: qsTr("WARNING: Do not reuse your Cred keys on another fork, UNLESS this fork has key reuse mitigations built in. Doing so will harm your privacy.") + translationManager.emptyString
+                        text: qsTr("WARNING: Do not reuse your Cred keys on another fork, UNLESS this fork has key reuse mitigations built in. Doing so will harm your privacy." + translationManager.emptyString)
                         wrapMode: Text.Wrap
                         font.family: Style.fontRegular.name
                         font.pixelSize: 15 * scaleRatio
@@ -128,8 +128,7 @@ Rectangle {
                 copyButton: true
                 addressValidation: false
                 readOnly: true
-                wrapMode: Text.WordWrap
-                fontColor: "white"
+                wrapAnywhere: false
             }
         }
 
@@ -149,40 +148,27 @@ Rectangle {
                 opacity: Style.dividerOpacity
                 Layout.bottomMargin: 10 * scaleRatio
             }
-            LineEdit {
-                Layout.fillWidth: true
-                id: secretViewKey
+            TextEdit {
+                id: keysText
+                wrapMode: TextEdit.Wrap
+                Layout.fillWidth: true;
+                font.pixelSize: 14 * scaleRatio
+                textFormat: TextEdit.RichText
                 readOnly: true
-                copyButton: true
-                labelText: qsTr("Secret view key") + translationManager.emptyString
-                fontSize: 16 * scaleRatio
-            }
-            LineEdit {
-                Layout.fillWidth: true
-                Layout.topMargin: 25 * scaleRatio
-                id: publicViewKey
-                readOnly: true
-                copyButton: true
-                labelText: qsTr("Public view key") + translationManager.emptyString
-                fontSize: 16 * scaleRatio
-            }
-            LineEdit {
-                Layout.fillWidth: true
-                Layout.topMargin: 25 * scaleRatio
-                id: secretSpendKey
-                readOnly: true
-                copyButton: true
-                labelText: qsTr("Secret spend key") + translationManager.emptyString
-                fontSize: 16 * scaleRatio
-            }
-            LineEdit {
-                Layout.fillWidth: true
-                Layout.topMargin: 25 * scaleRatio
-                id: publicSpendKey
-                readOnly: true
-                copyButton: true
-                labelText: qsTr("Public spend key") + translationManager.emptyString
-                fontSize: 16 * scaleRatio
+                color: Style.defaultFontColor
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        appWindow.showStatusMessage(qsTr("Double tap to copy"),3)
+                    }
+                    onDoubleClicked: {
+                        parent.selectAll()
+                        parent.copy()
+                        parent.deselect()
+                        console.log("copied to clipboard");
+                        appWindow.showStatusMessage(qsTr("Keys copied to clipboard"),3)
+                    }
+                }
             }
         }
 
@@ -203,25 +189,23 @@ Rectangle {
                 Layout.bottomMargin: 10 * scaleRatio
             }
 
-            ColumnLayout {
-                RadioButton {
+            RowLayout {
+                StandardButton {
+                    enabled: !fullWalletQRCode.visible
                     id: showFullQr
-                    enabled: !this.checked
-                    checked: fullWalletQRCode.visible
+                    small: true
                     text: qsTr("Spendable Wallet") + translationManager.emptyString
                     onClicked: {
                         viewOnlyQRCode.visible = false
-                        showViewOnlyQr.checked = false
                     }
                 }
-                RadioButton {
-                    enabled: !this.checked
+                StandardButton {
+                    enabled: fullWalletQRCode.visible
                     id: showViewOnlyQr
-                    checked: viewOnlyQRCode.visible
+                    small: true
                     text: qsTr("View Only Wallet") + translationManager.emptyString
                     onClicked: {
                         viewOnlyQRCode.visible = true
-                        showFullQr.checked = false
                     }
                 }
                 Layout.bottomMargin: 30 * scaleRatio
@@ -260,10 +244,10 @@ Rectangle {
     function onPageCompleted() {
         console.log("keys page loaded");
 
-        secretViewKey.text = currentWallet.secretViewKey
-        publicViewKey.text = currentWallet.publicViewKey
-        secretSpendKey.text = (!currentWallet.viewOnly) ? currentWallet.secretSpendKey : ""
-        publicSpendKey.text = currentWallet.publicSpendKey
+        keysText.text = "<b>" + qsTr("Secret view key") + ":</b> " + currentWallet.secretViewKey
+        keysText.text += "<br><br><b>" + qsTr("Public view key") + ":</b> " + currentWallet.publicViewKey
+        keysText.text += (!currentWallet.viewOnly) ? "<br><br><b>" + qsTr("Secret spend key") + ":</b> " + currentWallet.secretSpendKey : ""
+        keysText.text += "<br><br><b>" + qsTr("Public spend key") + ":</b> " + currentWallet.publicSpendKey
 
         seedText.text = currentWallet.seed
 
