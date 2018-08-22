@@ -7,12 +7,12 @@ Copyright (c) 2014-2018, The Cred Project
 - Web: [getcred.org](https://getcred.org)
 - Forum: [forum.getcred.org](https://forum.getcred.org)
 - Mail: [dev@getcred.org](mailto:dev@getcred.org)
-- Github: [https://github.com/cred-project/cred-gui](https://github.com/cred-project/cred-gui)
+- Github: [https://github.com/VangPangPao/cred-gui](https://github.com/VangPangPao/cred-gui)
 - IRC: [#cred-dev on Freenode](irc://chat.freenode.net/#cred-dev)
 
 ## Vulnerability response
 
-- Our [Vulnerability Response Process](https://github.com/cred-project/meta/blob/master/VULNERABILITY_RESPONSE_PROCESS.md) encourages responsible disclosure
+- Our [Vulnerability Response Process](https://github.com/VangPangPao/meta/blob/master/VULNERABILITY_RESPONSE_PROCESS.md) encourages responsible disclosure
 - We are also available via [HackerOne](https://hackerone.com/cred)
 
 ## Introduction
@@ -27,7 +27,7 @@ Cred is a private, secure, untraceable, decentralised digital currency. You are 
 
 ## About this project
 
-This is the GUI for the [core Cred implementation](https://github.com/cred-project/cred). It is open source and completely free to use without restrictions, except for those specified in the license agreement below. There are no restrictions on anyone creating an alternative implementation of Cred that uses the protocol and network in a compatible manner.
+This is the GUI for the [core Cred implementation](https://github.com/VangPangPao/cred). It is open source and completely free to use without restrictions, except for those specified in the license agreement below. There are no restrictions on anyone creating an alternative implementation of Cred that uses the protocol and network in a compatible manner.
 
 As with many development projects, the repository on Github is considered to be the "staging" area for the latest changes. Before changes are merged into that branch on the main repository, they are tested by individual developers in their own branches, submitted as a pull request, and then subsequently tested by contributors who focus on testing and code reviews. That having been said, the repository should be carefully considered before using it in a production environment, unless there is a patch in the repository for a particular show-stopping issue you are experiencing. It is generally a better idea to use a tagged release for stability.
 
@@ -108,7 +108,7 @@ Packaging for your favorite distribution would be a welcome contribution!
 
 3. Clone repository
 
-    `git clone https://github.com/cred-project/cred-gui.git`
+    `git clone https://github.com/VangPangPao/cred-gui.git`
 
 4. Build
 
@@ -125,7 +125,7 @@ The executable can be found in the build/release/bin folder.
 
 2. Install [homebrew](http://brew.sh/)
 
-3. Install [cred](https://github.com/cred-project/cred) dependencies:
+3. Install [cred](https://github.com/VangPangPao/cred) dependencies:
 
   `brew install boost --c++11`
 
@@ -155,7 +155,7 @@ The executable can be found in the build/release/bin folder.
 
 6. Grab an up-to-date copy of the cred-gui repository
 
-  `git clone https://github.com/cred-project/cred-gui.git`
+  `git clone https://github.com/VangPangPao/cred-gui.git`
 
 7. Go into the repository
 
@@ -194,7 +194,7 @@ The Cred GUI on Windows is 64 bits only; 32-bit Windows GUI builds are not offic
     pacman -S mingw-w64-x86_64-toolchain make mingw-w64-x86_64-cmake mingw-w64-x86_64-boost mingw-w64-x86_64-openssl mingw-w64-x86_64-zeromq mingw-w64-x86_64-libsodium
     ```
 
-    You find more details about those dependencies in the [Cred documentation](https://github.com/cred-project/cred). Note that that there is no more need to compile Boost from source; like everything else, you can install it now with a MSYS2 package.
+    You find more details about those dependencies in the [Cred documentation](https://github.com/VangPangPao/cred). Note that that there is no more need to compile Boost from source; like everything else, you can install it now with a MSYS2 package.
 
 4. Install Qt5
 
@@ -213,7 +213,7 @@ The Cred GUI on Windows is 64 bits only; 32-bit Windows GUI builds are not offic
 6. Clone repository
 
     ```
-    git clone https://github.com/cred-project/cred-gui.git
+    git clone https://github.com/VangPangPao/cred-gui.git
     ```
 
 7. Build

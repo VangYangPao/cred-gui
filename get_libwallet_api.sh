@@ -1,5 +1,5 @@
 #!/bin/bash
-CRED_URL=https://github.com/cred-project/cred.git
+CRED_URL=https://github.com/VangYangPao/cred.git
 CRED_BRANCH=master
 
 pushd $(pwd)
